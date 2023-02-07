@@ -1,0 +1,14 @@
+# General
+/**/bin
+/**/obj
+*csproj.user
+*csproj.vspscc
+*.vssscc
+.vs
+.tfignore
+*.log
+*.log.*
+
+
+# Tests Related
+/Reports
