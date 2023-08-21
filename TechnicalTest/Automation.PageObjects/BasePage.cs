@@ -43,4 +43,11 @@ public abstract class BasePage : BaseElement
         jsExec.ExecuteScript($"window.scrollBy(0,{pixels})");
         Thread.Sleep(1000);
     }
+
+    public void ScrollToBottom()
+    {
+        var jsExec = (IJavaScriptExecutor)Driver;
+        jsExec.ExecuteScript($"window.scrollTo(0,document.body.scrollHeight);");
+        Thread.Sleep(1000);
+    }
 }

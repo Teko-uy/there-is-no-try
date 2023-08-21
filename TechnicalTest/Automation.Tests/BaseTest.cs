@@ -2,6 +2,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using Automation.Common;
 using NUnit.Framework.Interfaces;
+using System.Text;
 
 namespace Hms.Essette.GUI.TestsNew;
 
@@ -22,9 +23,9 @@ public class BaseTest
     protected virtual void OneTimeSetUp()
     {
         TestContext.WriteLine("Starting test run...");
-        _driver = DriverUtilities.NewWebDriverInstance("chrome", new string[] { "--window-size=1920,1080"/*, "--headless" */});
+        _driver = DriverUtilities.NewWebDriverInstance("chrome", new string[] { "--window-size=1920,1080", "--no-sandbox"/*, "--headless" */});
         _driver.Maximize();
-        _driver.Navigate().GoToUrl("");
+        _driver.Navigate().GoToUrl("https://www.mercadolibre.com.uy/");
     }
 
     /// <summary>
@@ -35,7 +36,7 @@ public class BaseTest
     {
         _driver.Shutdown();
         TestContext.WriteLine("End test run.");
-        Report.Save();
+        //Report.Save();
     }
 
     /// <summary>
@@ -80,5 +81,25 @@ public class BaseTest
             Report.FailAction(ex.Message + Environment.NewLine + ex, Driver.CaptureScreenshotAsBase64String());
             throw;
         }
+    }
+
+    /// <summary>
+    /// Saves the product details to a txt file. If no save location is provided, the file will be saved on the desktop.
+    /// </summary>
+    /// <param name="details"></param>
+    /// <param name="saveLocation"></param>
+    public void SaveProductDetails(List<string> details, string saveLocation = "")
+    {
+        string fileName = $"Camisetas_ML_{DateTime.Now:dd-MM-yyyy}.csv";
+        string filePath;
+        if (!string.IsNullOrEmpty(saveLocation))
+        {
+            filePath = Path.Combine(saveLocation, fileName);
+        }
+        else
+        {
+            filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
+        }
+        File.WriteAllLines(filePath, details, Encoding.UTF8);
     }
 }
